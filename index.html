@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- PWA / iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="C·Obras">
+  <meta name="theme-color" content="#2563EB">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <title>Cuadro de Mando · Obras</title>
+
+  <!-- storage shim: window.storage en memoria (sin localStorage) -->
+  <script>
+  (function(){
+    var mem={};
+    window.storage={
+      get:function(k){return Promise.resolve(k in mem?{value:mem[k]}:null)},
+      set:function(k,v){mem[k]=v;return Promise.resolve({value:v})},
+      delete:function(k){delete mem[k];return Promise.resolve({})},
+      list:function(){return Promise.resolve({keys:Object.keys(mem)})}
+    };
+  })();
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+    body{margin:0;overscroll-behavior:none}
+    #root{min-height:100dvh}
+    /* safe area para el notch y la barra de gestos del iPhone */
+    .cmo{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="app.js"></script>
+  <script>window.__mount&&window.__mount()</script>
+  <script>
+    if('serviceWorker' in navigator){
+      window.addEventListener('load',function(){
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
+</body>
+</html>
